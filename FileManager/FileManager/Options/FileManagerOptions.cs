@@ -13,7 +13,7 @@ namespace FileManager.Options
         public List<string> AllowedImageExtensions { get; set; } = new List<string> { ".jpg", ".jpeg", ".png", ".gif" };
         public List<string> AllowedDocumentExtensions { get; set; } = new List<string> { ".pdf", ".docx", ".txt" };
         public List<string> AllowedVideoExtensions { get; set; } = new List<string> { ".mp4", ".avi", ".mov" };
-
+        public long MaxFileSizeBytes= 10 * 1024 * 1024;
     }
 
 }

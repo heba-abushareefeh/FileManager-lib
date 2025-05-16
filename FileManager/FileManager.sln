@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManager", "FileManager\FileManager.csproj", "{03B1552A-2DA8-4581-9883-A087EFAEC523}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManagerTesting", "FileManagerTesting\FileManagerTesting.csproj", "{E2C85DEB-B8B2-4490-A554-12122F7E87D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{03B1552A-2DA8-4581-9883-A087EFAEC523}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03B1552A-2DA8-4581-9883-A087EFAEC523}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03B1552A-2DA8-4581-9883-A087EFAEC523}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2C85DEB-B8B2-4490-A554-12122F7E87D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2C85DEB-B8B2-4490-A554-12122F7E87D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2C85DEB-B8B2-4490-A554-12122F7E87D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2C85DEB-B8B2-4490-A554-12122F7E87D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
