@@ -8,7 +8,7 @@ namespace FileManager.Options
 {
     public class FileManagerOptions
     {
-        public string BaseUrl { get; set; } = string.Empty;
+        //public string BaseUrl { get; set; } = string.Empty;
         public string RootFolderName { get; set; } = "Uploads";
         public List<string> AllowedImageExtensions { get; set; } = new List<string> { ".jpg", ".jpeg", ".png", ".gif" };
         public List<string> AllowedDocumentExtensions { get; set; } = new List<string> { ".pdf", ".docx", ".txt" };

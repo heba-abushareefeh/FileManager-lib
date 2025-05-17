@@ -12,5 +12,8 @@
   <ItemGroup>
     <ProjectReference Include="..\FileManager\FileManager.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Uploads\" />
+  </ItemGroup>
 
 </Project>

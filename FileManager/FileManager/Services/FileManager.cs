@@ -12,8 +12,18 @@ using static FileManager.Services.FileManager;
 
 namespace FileManager.Services
 {
-    public class FileManager : IFileManager
+
+    public enum FileType
     {
+        Image,
+        Document,
+        Video,
+        Other
+    }
+
+    internal class FileManager : IFileManager
+    {
+      
 
         private readonly FileManagerOptions _option;
 
@@ -27,14 +37,8 @@ namespace FileManager.Services
         };
 
 
-        public enum FileType
-        {
-            Image,
-            Document,
-            Video,
-            Other
-        }
-        public bool IsValidExtensions(FileType type,string fileExtensions,out List<string> allowedExtensions)
+        
+        internal bool IsValidExtensions(FileType type,string fileExtensions,out List<string> allowedExtensions)
         {
             if (type == FileType.Image)
             {
@@ -53,6 +57,10 @@ namespace FileManager.Services
             }
             allowedExtensions= new List<string>();
             return true;
+        }
+        internal string GetDirectoryPath(FileType type)
+        {
+            return Path.Combine(Directory.GetCurrentDirectory(), _option.RootFolderName, type.ToString());
         }
         public async Task<string> UploadFileAsync(IFormFile file, FileType type = FileType.Other)
         {
@@ -73,10 +81,11 @@ namespace FileManager.Services
                 throw new Exception($"Invalid file type. Allowed extensions for {type}: {string.Join(", ", allowedExtensions)}");
 
             // هذا الباث اللي شغال فيه التطبيق، يعني مجلد البروسيس (exe or dll location)
-            _option.BaseUrl = Directory.GetCurrentDirectory();
+            //var BaseUrl = Directory.GetCurrentDirectory();
 
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-            var directoryPath=Path.Combine(_option.BaseUrl,_option.RootFolderName,type.ToString());
+            //var directoryPath=Path.Combine(BaseUrl,_option.RootFolderName,type.ToString());
+            var directoryPath=GetDirectoryPath(type);
             if (!Directory.Exists(directoryPath))
                 Directory.CreateDirectory(directoryPath);
 
@@ -85,9 +94,24 @@ namespace FileManager.Services
             {
                 await file.CopyToAsync(stream);
             }
-            return fullFilePath;
+            return fileName;
 
 
         }
+
+        public bool DeleteFileByName(string fileName, FileType type = FileType.Other)
+        {
+            if (string.IsNullOrEmpty(fileName)) throw new Exception("Invalid File");
+
+            var directoryPath = GetDirectoryPath(type);
+            var fullFilePath = Path.Combine(directoryPath, fileName);
+
+            if (!System.IO.File.Exists(fullFilePath))
+                throw new FileNotFoundException("File not found at path: " + fullFilePath);
+
+            System.IO.File.Delete(fullFilePath);
+            return true;
+        }
+
     }
 }
