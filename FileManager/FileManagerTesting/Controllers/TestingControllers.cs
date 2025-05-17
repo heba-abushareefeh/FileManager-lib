@@ -21,8 +21,10 @@ namespace FileManagerTesting.Controllers
         {
             try
             {
-                var fileName = await _file.UploadFileAsync(file,FileType.Video);
-                var fileUrl = $"{Request.Scheme}://{Request.Host}/Uploads/Video/{fileName}";
+                var type = FileType.Image;
+                var fileName = await _file.UploadFileAsync(file, type);
+                Console.WriteLine(FileType.Image.ToString());
+                var fileUrl = $"{Request.Scheme}://{Request.Host}/Uploads/{type}/{fileName}";
                 return Ok(new { url = fileUrl } );
             }
             catch (Exception e)
@@ -44,6 +46,37 @@ namespace FileManagerTesting.Controllers
                 return StatusCode(500, "An Error Occurs: " + e.Message);
             }
         }
+
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> DownloadFileTesting(string fileName)
+        {
+            try
+            {
+                var fileBytes = _file.DownloadFileByName(fileName, FileType.Image);
+                return File(fileBytes, "application/octet-stream", fileName);
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "An Error Occurs: " + e.Message);
+            }
+        }
+        [HttpPost("UploadMultiple")]
+        public async Task<IActionResult> UploadMultipleFiles([FromForm] List<IFormFile> files)
+        {
+            try
+            {
+                var result = await _file.UploadMultipleFilesAsync(files, FileType.Image);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        
 
 
 

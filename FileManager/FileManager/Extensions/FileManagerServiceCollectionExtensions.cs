@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.FileProviders;
 
 namespace FileManager.Extensions
 {
@@ -18,6 +20,16 @@ namespace FileManager.Extensions
             services.Configure<FileManagerOptions>(configuration.GetSection(sectionName));
             services.AddScoped<IFileManager, Services.FileManager>();
             return services;
+        }
+
+        public static IApplicationBuilder xy(this IApplicationBuilder app)
+        {
+           return app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads")),
+                RequestPath = "/Uploads"
+            });
         }
 
     }

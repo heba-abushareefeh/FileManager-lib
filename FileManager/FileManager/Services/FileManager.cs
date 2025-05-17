@@ -9,6 +9,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using static FileManager.Services.FileManager;
+using System.IO.Compression;
+
 
 namespace FileManager.Services
 {
@@ -38,7 +40,7 @@ namespace FileManager.Services
 
 
         
-        internal bool IsValidExtensions(FileType type,string fileExtensions,out List<string> allowedExtensions)
+        public bool IsValidExtensions(FileType type,string fileExtensions,out List<string> allowedExtensions)
         {
             if (type == FileType.Image)
             {
@@ -62,6 +64,16 @@ namespace FileManager.Services
         {
             return Path.Combine(Directory.GetCurrentDirectory(), _option.RootFolderName, type.ToString());
         }
+        public double GetTotalSizeInMB(List<IFormFile> files)
+        {
+            if (files == null || files.Count == 0)
+                return 0;
+
+            long totalBytes = files.Sum(f => f.Length);
+            double totalMB = Math.Round((double)totalBytes / (1024 * 1024), 2); 
+            return totalMB;
+        }
+
         public async Task<string> UploadFileAsync(IFormFile file, FileType type = FileType.Other)
         {
 
@@ -79,8 +91,6 @@ namespace FileManager.Services
 
             if (!IsValidExtensions(type, extension,out List<string> allowedExtensions))
                 throw new Exception($"Invalid file type. Allowed extensions for {type}: {string.Join(", ", allowedExtensions)}");
-
-            // هذا الباث اللي شغال فيه التطبيق، يعني مجلد البروسيس (exe or dll location)
             //var BaseUrl = Directory.GetCurrentDirectory();
 
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
@@ -112,6 +122,52 @@ namespace FileManager.Services
             System.IO.File.Delete(fullFilePath);
             return true;
         }
+        public byte[] DownloadFileByName(string fileName, FileType type = FileType.Other)
+        {
+            var path = Path.Combine(GetDirectoryPath(type), fileName);
+
+            if (!System.IO.File.Exists(path))
+                throw new FileNotFoundException();
+
+            return System.IO.File.ReadAllBytes(path);
+        }
+
+        public async Task<List<string>> UploadMultipleFilesAsync(List<IFormFile> files, FileType type = FileType.Other, double? maxSizeInMB=null) 
+        {
+            if (files == null || files.Count == 0)
+                throw new Exception("No files provided.");
+
+           
+            double defaultMaxSizeInMB = Math.Round((double)(files.Count * _option.MaxFileSizeBytes) / (1024 * 1024), 2);
+            maxSizeInMB = maxSizeInMB ?? defaultMaxSizeInMB;
+
+            double totalSizeInMB = GetTotalSizeInMB(files);
+            if (totalSizeInMB > maxSizeInMB)
+                throw new ArgumentException($"Files size ({totalSizeInMB} MB) exceeds the allowed limit of {maxSizeInMB} MB.");
+
+            var uploadedFiles = new List<string>();
+            foreach (var file in files)
+            {
+                var path = await UploadFileAsync(file, type);
+                uploadedFiles.Add(path);
+            }
+
+            return uploadedFiles;
+        }
+
+        public async Task<byte[]> CompressFileToZipAsync(IFormFile file)
+        {
+            using var outputStream = new MemoryStream();
+            using (var archive = new ZipArchive(outputStream, ZipArchiveMode.Create, true))
+            {
+                var zipEntry = archive.CreateEntry(file.FileName, CompressionLevel.Optimal);
+                using var entryStream = zipEntry.Open();
+                using var inputStream = file.OpenReadStream();
+                await inputStream.CopyToAsync(entryStream);
+            }
+            return outputStream.ToArray();
+        }
+
 
     }
 }
