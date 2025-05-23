@@ -10,10 +10,16 @@ namespace FileManager.Options
     {
         //public string BaseUrl { get; set; } = string.Empty;
         public string RootFolderName { get; set; } = "Uploads";
-        public List<string> AllowedImageExtensions { get; set; } = new List<string> { ".jpg", ".jpeg", ".png", ".gif" };
-        public List<string> AllowedDocumentExtensions { get; set; } = new List<string> { ".pdf", ".docx", ".txt" };
-        public List<string> AllowedVideoExtensions { get; set; } = new List<string> { ".mp4", ".avi", ".mov" };
-        public long MaxFileSizeBytes= 10 * 1024 * 1024;
+        public List<string> AllowedExtensions { get; set; } = new List<string> { ".jpg", ".jpeg", ".png", ".gif", ".pdf", ".docx", ".txt" , ".mp4", ".avi", ".mov" };
+       
+        public long MaxSingleFileSizeBytes { get; set; } = 10 * 1024 * 1024;
+
+        public long MaxTotalFilesSizeInMB { get; set; } = 50 ;
+
+        // إضافات السحابة
+        public string? AzureBlobConnectionString { get; set; }
+        public string? AzureBlobContainerName { get; set; }
+
     }
 
 }

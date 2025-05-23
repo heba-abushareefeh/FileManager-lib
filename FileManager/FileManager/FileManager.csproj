@@ -4,9 +4,20 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>MH.FileManager</PackageId>
+    <Title>MH.FileManager</Title>
+    <Authors>Heba Abu Shareefeh; Mohammad Mrayyan</Authors>
+    <Company />
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/heba-abushareefeh/FileManager-lib</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/heba-abushareefeh/FileManager-lib</PackageProjectUrl>
+    <Copyright>FileManager is a lightweight and flexible .NET 8 library designed to simplify file management tasks in ASP.NET Core applications. This package provides a comprehensive solution for uploading, downloading, deleting, and compressing files, along with built-in support for file validation, size restrictions, and static file serving.</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.24.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.3.0" />
@@ -15,6 +26,17 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="9.0.5" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

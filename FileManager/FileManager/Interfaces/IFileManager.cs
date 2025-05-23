@@ -10,14 +10,14 @@ namespace FileManager.Interfaces
 {
     public interface IFileManager
     {
-        public Task<string> UploadFileAsync(IFormFile file, FileType type = FileType.Other);
+        public Task<string> UploadFileAsync(IFormFile file, string? subFolderName = null);
 
-        public bool IsValidExtensions(FileType type, string fileExtensions, out List<string> allowedExtensions);
         public double GetTotalSizeInMB(List<IFormFile> files);
-        public bool DeleteFileByName(string fileName, FileType type = FileType.Other);
-        public byte[] DownloadFileByName(string fileName, FileType type = FileType.Other);
-        public Task<List<string>> UploadMultipleFilesAsync(List<IFormFile> files, FileType type = FileType.Other, double? maxSizeInMB=null);
-        public Task<byte[]> CompressFileToZipAsync(IFormFile file);
+        public bool DeleteFileByName(string fileName);
+        public byte[] DownloadFileByName(string fileName);
+        public Task<List<string>>UploadMultipleFilesAsync(List<IFormFile> files, string? subFolderName= null);
+        public Task<string> UploadCompressedFileAsync(IFormFile file, string? subFolderName = null);
+        public Task<List<string>> UploadMultipleCompressedFilesAsync(List<IFormFile> files, string? subFolderName = null);
     }
 }
 

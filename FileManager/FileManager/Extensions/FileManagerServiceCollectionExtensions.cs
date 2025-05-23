@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 
 namespace FileManager.Extensions
 {
@@ -19,16 +20,30 @@ namespace FileManager.Extensions
         {
             services.Configure<FileManagerOptions>(configuration.GetSection(sectionName));
             services.AddScoped<IFileManager, Services.FileManager>();
+            // Enables access to HttpContext (e.g., for reading the request)
+            services.AddHttpContextAccessor();
             return services;
         }
 
-        public static IApplicationBuilder xy(this IApplicationBuilder app)
+        public static IApplicationBuilder UseFileManagerStaticFiles(this IApplicationBuilder app)
         {
-           return app.UseStaticFiles(new StaticFileOptions
+            var options = app.ApplicationServices
+                          .GetRequiredService<IOptions<FileManagerOptions>>()
+                          .Value;
+            var folder=options.RootFolderName;
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), folder);
+
+            
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            return app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
-                Path.Combine(Directory.GetCurrentDirectory(), "Uploads")),
-                RequestPath = "/Uploads"
+                folderPath),
+                RequestPath = $"/{folder}"
             });
         }
 

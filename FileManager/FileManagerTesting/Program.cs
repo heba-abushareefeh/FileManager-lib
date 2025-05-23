@@ -5,6 +5,9 @@ using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Add this ******************************************************************
+//builder.Services.AddHttpContextAccessor();
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -17,12 +20,9 @@ builder.Services.AddFileManager(builder.Configuration);
 
 var app = builder.Build();
 
-//app.UseStaticFiles(new StaticFileOptions
-//{
-//    FileProvider = new PhysicalFileProvider(
-//        Path.Combine(Directory.GetCurrentDirectory(), "Uploads")),
-//    RequestPath = "/Uploads"
-//});
+// ***********add this**************************
+app.UseFileManagerStaticFiles();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

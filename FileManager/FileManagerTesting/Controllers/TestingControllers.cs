@@ -21,10 +21,10 @@ namespace FileManagerTesting.Controllers
         {
             try
             {
-                var type = FileType.Image;
-                var fileName = await _file.UploadFileAsync(file, type);
-                Console.WriteLine(FileType.Image.ToString());
-                var fileUrl = $"{Request.Scheme}://{Request.Host}/Uploads/{type}/{fileName}";
+                //var type = FileType.Image;
+                var fileUrl = await _file.UploadFileAsync(file);
+                //Console.WriteLine(FileType.Image.ToString());
+                //var fileUrl = $"{Request.Scheme}://{Request.Host}/Uploads/{type}/{fileName}";
                 return Ok(new { url = fileUrl } );
             }
             catch (Exception e)
@@ -38,7 +38,7 @@ namespace FileManagerTesting.Controllers
         {
             try
             {
-                var result=_file.DeleteFileByName(fileName,FileType.Video);
+                var result = _file.DeleteFileByName(fileName);
                 return Ok(result);
             }
             catch (Exception e)
@@ -53,7 +53,7 @@ namespace FileManagerTesting.Controllers
         {
             try
             {
-                var fileBytes = _file.DownloadFileByName(fileName, FileType.Image);
+                var fileBytes = _file.DownloadFileByName(fileName);
                 return File(fileBytes, "application/octet-stream", fileName);
 
             }
@@ -67,7 +67,7 @@ namespace FileManagerTesting.Controllers
         {
             try
             {
-                var result = await _file.UploadMultipleFilesAsync(files, FileType.Image);
+                var result = await _file.UploadMultipleFilesAsync(files,"Image");
                 return Ok(result);
             }
             catch (Exception ex)
@@ -75,10 +75,25 @@ namespace FileManagerTesting.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> UploadCompressedFileTesting(IFormFile file)
+        {
+            try
+            {
+                //var type = FileType.Image;
+                var fileUrl = await _file.UploadCompressedFileAsync(file);
+                //Console.WriteLine(FileType.Image.ToString());
+                //var fileUrl = $"{Request.Scheme}://{Request.Host}/Uploads/{type}/{fileName}";
+                return Ok(new { url = fileUrl });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "An Error Occurs: " + e.Message);
+            }
 
-        
 
 
 
+        }
     }
 }
